@@ -2,14 +2,18 @@ package com.project.financeapp.infrastructure.persistence.repository;
 
 import com.project.financeapp.domain.Model.User;
 import com.project.financeapp.domain.ports.output.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
+@Slf4j
 public class UserRepositoryImpl implements UserRepository {
 
     private final SimpleJdbcCall simpleJdbcCall1;
@@ -41,19 +45,34 @@ public class UserRepositoryImpl implements UserRepository {
             }
             Object userRowObject = results.get("out_user_row");
 
-            return objectMapper.convertValue(userRowObject, User.class);
+            String userJson = (String) userRowObject;
+            return objectMapper.readValue(userJson, User.class);
 
         } catch(Exception e){
-            throw e;
+            throw new RuntimeException(e.getMessage());
         }
-
     }
 
     @Override
-    public User findByEmail(User email) {
-//        try{
-//
-//        }
-        return null;
+    public User findByEmail(User user) {
+        try{
+            Map<String, Object> params = new HashMap<>();
+            params.put("in_email", user.getEmail());
+
+            Map<String, Object> results = simpleJdbcCall2.execute(params);
+            String message = (String) results.get("out_message");
+            if(message != null && !message.isEmpty() && !"Success".equalsIgnoreCase(message)){
+                throw new RuntimeException(message);
+            }
+            Object userRowObject = results.get("out_user_row");
+            String userJson = (String) userRowObject;
+            User obtainedUser = objectMapper.readValue(userJson, User.class);
+            if (!passwordEncoder.matches(user.getPassword(), obtainedUser.getPassword())) {
+                throw new RuntimeException("Invalid Password");
+            }
+            return obtainedUser;
+        } catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

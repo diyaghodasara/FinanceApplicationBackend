@@ -5,7 +5,7 @@ import com.project.financeapp.application.dto.LoginRequestDTO;
 import com.project.financeapp.application.dto.SignUpRequestDTO;
 import com.project.financeapp.domain.Model.User;
 import com.project.financeapp.domain.ports.input.AuthenticationUseCase;
-import com.project.financeapp.infrastructure.security.JwtUtil;
+import com.project.financeapp.application.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,7 +66,7 @@ public class AuthenticationController {
 
     private AuthResponseDTO generateResponse(User user){
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
-        String token = jwtUtil.generateToken(user.getEmail(), user.getUserId());
+        String token = jwtUtil.generateToken(user.getUsername(), user.getUserId());
         authResponseDTO.setUsername(user.getUsername());
         authResponseDTO.setUserId(user.getUserId());
         authResponseDTO.setToken(token);
