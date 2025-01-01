@@ -1,4 +1,4 @@
-package com.project.financeapp.application.dto;
+package com.project.financeapp.application.dto.Auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequestDTO {
+public class LoginRequestDTO {
     private String email;
     private String password;
-    private String username;
 }

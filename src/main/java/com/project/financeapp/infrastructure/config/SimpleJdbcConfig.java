@@ -32,4 +32,52 @@ public class SimpleJdbcConfig {
                         new SqlOutParameter("out_message", Types.VARCHAR)
                 );
     }
+
+    @Bean(name = "AddTransaction")
+    public SimpleJdbcCall addTransactionCall(DataSource dataSource) {
+        return new SimpleJdbcCall(dataSource).withSchemaName("FinanceDB").withProcedureName("AddTransaction")
+                .declareParameters(
+                        new SqlParameter("in_user_id",Types.BIGINT),
+                        new SqlParameter("in_category_id",Types.BIGINT),
+                        new SqlParameter("in_amount",Types.DECIMAL),
+                        new SqlParameter("in_date",Types.DATE),
+                        new SqlParameter("in_description",Types.CLOB),
+                        new SqlOutParameter("out_transaction_id",Types.BIGINT),
+                        new SqlOutParameter("out_message", Types.VARCHAR)
+
+                );
+    }
+    @Bean(name = "UpdateTransaction")
+    public SimpleJdbcCall updateTransactionCall(DataSource dataSource) {
+        return new SimpleJdbcCall(dataSource).withSchemaName("FinanceDB").withProcedureName("AddTransaction")
+                .declareParameters(
+                        new SqlParameter("in_transaction_id",Types.BIGINT),
+                        new SqlParameter("in_user_id",Types.BIGINT),
+                        new SqlParameter("in_category_id",Types.BIGINT),
+                        new SqlParameter("in_amount",Types.DECIMAL),
+                        new SqlParameter("in_date",Types.DATE),
+                        new SqlParameter("in_description",Types.CLOB),
+                        new SqlOutParameter("out_message", Types.VARCHAR)
+
+                );
+    }
+    @Bean(name = "DeleteTransaction")
+    public SimpleJdbcCall DeleteTransactionCall(DataSource dataSource) {
+        return new SimpleJdbcCall(dataSource).withSchemaName("FinanceDB").withProcedureName("AddTransaction")
+                .declareParameters(
+                        new SqlParameter("in_transaction_id",Types.BIGINT),
+                        new SqlOutParameter("out_message", Types.VARCHAR)
+
+                );
+    }
+
+    @Bean(name = "Security")
+    public SimpleJdbcCall securityCall(DataSource dataSource) {
+        return new SimpleJdbcCall(dataSource).withSchemaName("FinanceDB").withProcedureName("Security")
+                .declareParameters(
+                        new SqlParameter("in_email",Types.VARCHAR),
+                        new SqlOutParameter("out_user_row", Types.OTHER),
+                        new SqlOutParameter("out_message", Types.VARCHAR)
+                );
+    }
 }

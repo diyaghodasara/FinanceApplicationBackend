@@ -38,13 +38,13 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String generateToken(String username, Long userId) {
+    public String generateToken(String email, Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiry_time))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -52,8 +52,11 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        log.info("Checking if token is valid: {}", token);
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        log.info("Checking if username is valid: {}", username);
+        log.info("Checking if user id is valid: {}", userDetails.getUsername());
+        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

@@ -1,8 +1,8 @@
 package com.project.financeapp.application.controller;
 
-import com.project.financeapp.application.dto.AuthResponseDTO;
-import com.project.financeapp.application.dto.LoginRequestDTO;
-import com.project.financeapp.application.dto.SignUpRequestDTO;
+import com.project.financeapp.application.dto.Auth.AuthResponseDTO;
+import com.project.financeapp.application.dto.Auth.LoginRequestDTO;
+import com.project.financeapp.application.dto.Auth.SignUpRequestDTO;
 import com.project.financeapp.domain.Model.User;
 import com.project.financeapp.domain.ports.input.AuthenticationUseCase;
 import com.project.financeapp.application.security.JwtUtil;
@@ -66,7 +66,7 @@ public class AuthenticationController {
 
     private AuthResponseDTO generateResponse(User user){
         AuthResponseDTO authResponseDTO = new AuthResponseDTO();
-        String token = jwtUtil.generateToken(user.getUsername(), user.getUserId());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getUserId());
         authResponseDTO.setUsername(user.getUsername());
         authResponseDTO.setUserId(user.getUserId());
         authResponseDTO.setToken(token);
